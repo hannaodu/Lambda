@@ -1,11 +1,11 @@
-name: deploy AWS lambda new 
+name: deploy AWS lambda  
 
 on: 
   push:
     branches:
        - main
     paths:
-       - 'Lambda/'
+       - 'Lambda/**'
 
 jobs:
   deploy-lambda: #name of job 
