@@ -9,7 +9,7 @@ on:
 
 jobs:
   deploy-lambda: #name of job 
-    runs-on: ubuntu-latest # specify runner 
+    runs-on: self-hosted # specify runner 
     steps:
     - uses: actions/checkout@v2
 
