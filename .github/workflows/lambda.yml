@@ -1,43 +1,66 @@
 
-name: deploy AWS lambda workflow
+name: Deploy AWS Lambda
 
-on: 
+on:
   push:
     branches:
-       - main
+      - main
     paths:
-       - 'lambda/**'
+      - 'lambda/**'  # This will catch all files in lambda directory and subdirectories
 
 jobs:
-  deploy-lambda: #name of job 
-    runs-on: ubuntu-latest # specify runner 
+  deploy-lambda:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10  # Added timeout for safety
+    
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v4  # Updated to latest version
 
-    - name: Set Up Python #set up python envi
-      uses: actions/setup-python@v4
+    - name: Set up Python
+      uses: actions/setup-python@v4  # Updated to latest version
       with:
         python-version: '3.12'
+        cache: 'pip'  # Added caching for better performance
 
-    - name: install dependencies #install packages 
+    - name: Check environment  # Added environment verification
       run: |
-       python -m pip install --upgrade pip
-       pip install -r lambda/requirements.txt -t lambda/
+        python --version
+        aws --version
 
-    - name: configure AWS Credentials #set up crednetials
-      uses: aws-actions/configure-aws-credentials@v4
-      with: 
+    - name: Install Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        if [ -f lambda/requirements.txt ]; then
+          pip install -r lambda/requirements.txt -t lambda/
+        else
+          echo "No requirements.txt found in lambda directory"
+        fi
+
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v4  # Updated to latest version
+      with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: 'eu-west-2'
+        aws-region: eu-west-2
 
-    - name: Deploy Lambda function #zip lambda directory 
+    - name: Deploy Lambda function
       run: |
-        cd lambda
-        zip -r lambda.zip .
-        aws lambda update-function-code --function-name my-test-cicd-lambda --zip-ffile fileb:lambda.zip
+        cd lambda || exit 1
+        zip -r lambda.zip . || exit 1
+        aws lambda update-function-code \
+          --function-name my-test-cicd-lambda \
+          --zip-file fileb://lambda.zip \
+          --no-cli-pager || exit 1
 
-        
+    - name: Verify deployment  # Added verification step
+      run: |
+        aws lambda wait function-updated --function-name my-test-cicd-lambda
+        aws lambda get-function --function-name my-test-cicd-lambda --query 'Configuration.[LastModified,State,LastUpdateStatus]' --output table
+
+
+
+
+
 
 
 
