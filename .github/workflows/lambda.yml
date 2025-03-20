@@ -5,7 +5,7 @@ on:
     branches:
        - main
     paths:
-       - 'lambda/'
+       - "lambda/"
 
 jobs:
   deploy-lambda: #name of job 
@@ -28,7 +28,7 @@ jobs:
       with: 
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: 'eu-west-2'
+        aws-region: "eu-west-2"
 
     - name: Deploy Lambda function #zip lambda directory 
       run: |
