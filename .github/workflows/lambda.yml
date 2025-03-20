@@ -9,7 +9,7 @@ on:
 
 jobs:
   deploy-lambda: #name of job 
-    runs-on: self-hosted # specify runner 
+    runs-on: Standard GitHub-hosted runners # specify runner 
     steps:
     - uses: actions/checkout@v2
 
