@@ -9,7 +9,7 @@ on:
 
 jobs:
   deploy-lambda: #name of job 
-    runs-on: ubuntu-latest # specify runner
+    runs-on: macos-latest # specify runner
     timeout-minutes: 10
 
     steps:
