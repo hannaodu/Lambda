@@ -9,22 +9,26 @@ on:
 
 jobs:
   deploy-lambda: #name of job 
-    runs-on: ubuntu-latest # specify runner 
+    runs-on: ubuntu-latest # specify runner
+    timeout-minutes: 10
+
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
 
     - name: Set Up Python #set up python envi
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
         python-version: '3.12'
+        cache: 'pip'  # Added caching for better performance
 
     - name: install dependencies #install packages 
       run: |
        python -m pip install --upgrade pip
        pip install -r lambda/requirements.txt -t lambda/
 
+
     - name: configure AWS Credentials #set up crednetials
-      uses: aws-actions/configure-aws-credentials@v2
+      uses: aws-actions/configure-aws-credentials@v4
       with: 
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
