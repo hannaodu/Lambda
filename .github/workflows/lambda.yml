@@ -1,4 +1,4 @@
-name: deploy AWS lambda 
+name: deploy AWS lambda new 
 
 on: 
   push:
