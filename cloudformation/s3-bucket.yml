@@ -4,27 +4,27 @@ Description: 's3 bucket for my CICD'
 Parameters:
   Environment:
     Type: String
-    Default: "Test"
+    Default: "test"
     AllowedValues: 
-      - Test
-      - Prod
-      - Staging
+      - test
+      - prod
+      - taging
 
 Resources:
-  S3Bucket:
+  MyS3Bucket:
     Type: 'AWS::S3::Bucket'
     Properties:
-      BucketName: !Sub "${AWS::StackName}-${Environment}-bucket"
-      VersioningConfiguration:
-        Status: Enabled
-    Tags:
+      BucketName: !Sub '${AWS::StackName}-${Environment}-bucket'
+      Tags:
       - Key: Environment
         Value: !Ref Environment
+      - Key: Environment
+        Value: !Ref GithubActionsTesting
 
   Outputs:
-    BuketName:
-      Description: "Bucket name"
-      Value: !Ref S3Bucket
+    BucketName:
+      Description: 'Name of created S3 Bucket'
+      Value: !Ref MyS3Bucket
       Export:
         Name: !Sub "${AWS::StackName}-${Environment}-bucket"
 
