@@ -23,8 +23,8 @@ Resources:
 
   Outputs:
     BuketName:
-      Description: "Bucket name"
-      Value: !Ref S3Bucket
+      Description: 'Name of created S3 Bucket'
+      Value: !Ref MyS3Bucket
       Export:
         Name: !Sub "${AWS::StackName}-${Environment}-bucket"
 
