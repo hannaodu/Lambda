@@ -4,11 +4,11 @@ Description: 's3 bucket for my CICD'
 Parameters:
   Environment:
     Type: String
-    Default: "Test"
+    Default: "test"
     AllowedValues: 
-      - Test
-      - Prod
-      - Staging
+      - test
+      - prod
+      - staging
 
 Resources:
   MyS3Bucket:
