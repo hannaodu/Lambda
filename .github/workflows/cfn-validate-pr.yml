@@ -2,7 +2,8 @@ name: Validate cloudformation on PR
 
 on:
     pull_request:
-        
+        paths:
+            - 'cloudformation/**'
 
 permissions:
     pull-requests: write
@@ -22,14 +23,14 @@ jobs:
               aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
               aws-region: 'eu-west-2'
 
-          - name: Validate Cloud Formation Template
+          - name: Validate CloudFormation Template
             run: |
               aws cloudformation validate-template --template-body file://cloudformation/S3-bucket.yaml
 
           - name:  Deploy stack
             run: |
               stack_name="pr-test-stack-${{github.event.pull_request.number}}"
-              aws cloudformation create stack --stackname $stack_name --template-file file://cloudformation/S3-bucket.yaml --parameters ParameterKey=Environment, ParameterValue=test
+              aws cloudformation create stack --stackname $stack_name --template-file file://cloudformation/S3-bucket.yaml --parameters ParameterKey=Environment, ParameterValue=Test
 
           - name: Comment on the PR
             uses: actions/github-script@v6
